@@ -108,5 +108,22 @@ namespace OWO_Valheim
                 }
             }
         }
+
+        /*
+            When any player is using guardian power
+        */
+        [HarmonyPatch(typeof(Player), "ActivateGuardianPower")]
+        class OnActiveGuardianPower
+        {
+            public static void Postfix(Player __instance)
+            {
+                if (!owoSkin.CanFeel()) return;
+
+                if (Player.IsPlayerInRange(__instance.transform.position, 10f, Player.m_localPlayer.GetPlayerID()))
+                {
+                    owoSkin.Feel("SuperPower");
+                }
+            }
+        }
     }
 }
