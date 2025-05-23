@@ -1,9 +1,6 @@
 ﻿using BepInEx;
-using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
-using System.Collections.Generic;
-using System.IO;
 
 namespace OWO_Valheim
 {
@@ -28,9 +25,7 @@ namespace OWO_Valheim
             harmony.PatchAll();
         }
 
-        /*
-        When player is eating food
-        */
+
         [HarmonyPatch(typeof(Player), "EatFood")]
         class OnEatingFood
         {
@@ -41,11 +36,6 @@ namespace OWO_Valheim
             }
         }
 
-
-        /*
-        When a status Effect starts, creates and starts thread
-        DEBUG FOR MORE STATUS EFFECTS
-        */
         [HarmonyPatch(typeof(StatusEffect), "TriggerStartEffects")]
         class OnTriggerStatus
         {
@@ -76,9 +66,6 @@ namespace OWO_Valheim
             }
         }
 
-        /*
-        When a statusEffect stops, stops thread corresponding to effect name
-        */
         [HarmonyPatch(typeof(StatusEffect), "Stop")]
         class OnStatusEffectStop
         {
@@ -109,9 +96,6 @@ namespace OWO_Valheim
             }
         }
 
-        /*
-            When any player is using guardian power
-        */
         [HarmonyPatch(typeof(Player), "ActivateGuardianPower")]
         class OnActiveGuardianPower
         {
@@ -122,6 +106,30 @@ namespace OWO_Valheim
                 if (Player.IsPlayerInRange(__instance.transform.position, 10f, Player.m_localPlayer.GetPlayerID()))
                 {
                     owoSkin.Feel("SuperPower");
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(Attack), nameof(Attack.OnAttackTrigger))]
+        class OnWeaponAttack
+        {
+            public static void Postfix(Attack __instance, ref Humanoid ___m_character, ref ItemDrop.ItemData ___m_weapon)
+            {
+                if (___m_character != Player.m_localPlayer || !owoSkin.CanFeel()) return;
+                owoSkin.LOG($"HUMANOID {___m_weapon.m_shared.m_itemType} -- {___m_weapon.m_shared.m_animationState} -- {___m_weapon.m_shared.m_name}");
+                switch (___m_weapon.m_shared.m_itemType)
+                {
+                    case ItemDrop.ItemData.ItemType.OneHandedWeapon:
+                    case ItemDrop.ItemData.ItemType.Tool:
+                        owoSkin.Feel("Attack");
+                        break;
+                    case ItemDrop.ItemData.ItemType.TwoHandedWeapon:
+                    case ItemDrop.ItemData.ItemType.Bow:
+                        owoSkin.Feel("Attack");
+                        break;
+                    case ItemDrop.ItemData.ItemType.Shield:
+                        owoSkin.Feel("Attack");
+                        break;
                 }
             }
         }
