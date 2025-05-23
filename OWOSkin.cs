@@ -9,7 +9,6 @@ namespace OWO_Valheim
 {
     public class OWOSkin
     {
-        public bool playing = false;
 
         private bool suitEnabled = false;
         private string modPath = "BepInEx\\Plugins";
@@ -188,7 +187,7 @@ namespace OWO_Valheim
 
         public bool CanFeel()
         {
-            return suitEnabled && playing;
+            return suitEnabled;
         }
 
         #region Loops

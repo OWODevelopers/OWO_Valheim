@@ -27,5 +27,18 @@ namespace OWO_Valheim
             var harmony = new Harmony("owo.patch.valheim");
             harmony.PatchAll();
         }
+
+        /*
+            When player is eating food
+        */
+        [HarmonyPatch(typeof(Player), "EatFood")]
+        class OnEatingFood
+        {
+            public static void Postfix(Player __instance)
+            {
+                if (__instance != Player.m_localPlayer || !owoSkin.CanFeel()) return;
+                owoSkin.Feel("Eating");
+            }
+        }
     }
 }
