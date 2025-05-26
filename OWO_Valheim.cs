@@ -231,5 +231,19 @@ namespace OWO_Valheim
                 }
             }
         }
+
+        [HarmonyPatch(typeof(WearNTear), "Damage")]
+        class OnBoatDamage
+        {
+            public static void Postfix(WearNTear __instance)
+            {
+                if (!owoSkin.CanFeel()) return;
+                Ship component = __instance.GetComponent<Ship>();
+                if (component != null && component.IsPlayerInBoat(Player.m_localPlayer))
+                {
+                    owoSkin.Feel("Ship Damage");
+                }
+            }
+        }
     }
 }
