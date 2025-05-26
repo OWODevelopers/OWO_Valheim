@@ -181,5 +181,32 @@ namespace OWO_Valheim
                 owoSkin.Feel("Impact");
             }
         }
+
+        [HarmonyPatch(typeof(Player), "TeleportTo")]
+        class OnTeleportStart
+        {
+            public static void Postfix(Player __instance, bool __result, ref bool ___m_teleporting)
+            {
+                if (__instance != Player.m_localPlayer || !owoSkin.CanFeel() || !__result) return;
+                
+                if (___m_teleporting)
+                {
+                    owoSkin.StartTeleporting();
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(Player), "UpdateTeleport")]
+        class OnTeleportUpdate
+        {
+            public static void Postfix(Player __instance,ref bool ___m_teleporting)
+            {
+                if (__instance != Player.m_localPlayer || !owoSkin.CanFeel()) return;
+                if (!___m_teleporting)
+                {
+                    owoSkin.StopTeleporting();
+                }
+            }
+        }
     }
 }

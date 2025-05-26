@@ -17,6 +17,7 @@ namespace OWO_Valheim
         private Dictionary<String, Muscle[]> muscleMap = new Dictionary<String, Muscle[]>();
 
         public bool heartBeatIsActive = false;
+        public bool teleportIsActive = false;
 
         public Dictionary<string, Sensation> SensationsMap { get => sensationsMap; set => sensationsMap = value; }
 
@@ -181,6 +182,20 @@ namespace OWO_Valheim
             else LOG("Feedback not registered: " + key);
         }
 
+
+        public void StopAllHapticFeedback()
+        {
+            StopHeartBeat();
+            OWO.Stop();
+        }
+
+        public bool CanFeel()
+        {
+            return suitEnabled;
+        }
+
+        #region Loops
+
         #region HeartBeat
 
         public void StartHeartBeat()
@@ -207,19 +222,31 @@ namespace OWO_Valheim
 
         #endregion
 
-        public void StopAllHapticFeedback()
+        #region Teleporting
+
+        public void StartTeleporting()
         {
-            StopHeartBeat();
-            OWO.Stop();
+            if (teleportIsActive) return;
+
+            teleportIsActive = true;
+            TeleportingFuncAsync();
         }
 
-        public bool CanFeel()
+        public void StopTeleporting()
         {
-            return suitEnabled;
+            teleportIsActive = false;
         }
 
-        #region Loops
+        public async Task TeleportingFuncAsync()
+        {
+            while (teleportIsActive)
+            {
+                Feel("Teleporting", 0);
+                await Task.Delay(1000);
+            }
+        }
 
+        #endregion
 
 
         #endregion
