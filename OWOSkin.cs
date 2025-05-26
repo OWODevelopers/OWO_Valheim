@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace OWO_Valheim
 {
@@ -15,6 +16,7 @@ namespace OWO_Valheim
         private Dictionary<String, Sensation> sensationsMap = new Dictionary<String, Sensation>();
         private Dictionary<String, Muscle[]> muscleMap = new Dictionary<String, Muscle[]>();
 
+        public bool heartBeatIsActive = false;
 
         public Dictionary<string, Sensation> SensationsMap { get => sensationsMap; set => sensationsMap = value; }
 
@@ -179,9 +181,35 @@ namespace OWO_Valheim
             else LOG("Feedback not registered: " + key);
         }
 
+        #region HeartBeat
+
+        public void StartHeartBeat()
+        {
+            if (heartBeatIsActive) return;
+
+            heartBeatIsActive = true;
+            HeartBeatFuncAsync();
+        }
+
+        public void StopHeartBeat()
+        {
+            heartBeatIsActive = false;
+        }
+
+        public async Task HeartBeatFuncAsync()
+        {
+            while (heartBeatIsActive)
+            {
+                Feel("Heart Beat", 0);
+                await Task.Delay(1000);
+            }
+        }
+
+        #endregion
 
         public void StopAllHapticFeedback()
         {
+            StopHeartBeat();
             OWO.Stop();
         }
 

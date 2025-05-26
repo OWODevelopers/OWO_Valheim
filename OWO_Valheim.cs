@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using System;
 
 namespace OWO_Valheim
 {
@@ -130,6 +131,29 @@ namespace OWO_Valheim
                     case ItemDrop.ItemData.ItemType.Shield:
                         owoSkin.Feel("Attack");
                         break;
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(Character), "SetHealth")]
+        class OnPlayerSetHealth
+        {
+            public static void Postfix(Character __instance)
+            {
+                if (__instance != Player.m_localPlayer || !owoSkin.CanFeel()) return;
+                int hp = Convert.ToInt32(__instance.GetHealth() * 100 / __instance.GetMaxHealth());
+                if (hp < 20 && hp > 0)
+                {
+                    owoSkin.StartHeartBeat();
+                }
+                else if (hp <= 0)
+                {
+                    owoSkin.StopAllHapticFeedback();
+                    owoSkin.Feel("Death");
+                }
+                else
+                {
+                    owoSkin.StopHeartBeat();
                 }
             }
         }
