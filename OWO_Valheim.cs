@@ -218,5 +218,18 @@ namespace OWO_Valheim
                 owoSkin.Feel("Thunder");
             }
         }
+
+        [HarmonyPatch(typeof(Tameable), "Interact")]
+        class OnPet
+        {
+            public static void Postfix(bool __result, bool alt)
+            {
+                if (!owoSkin.CanFeel()) return;
+                if (__result && !alt)
+                {
+                    owoSkin.Feel("Pet");
+                }
+            }
+        }
     }
 }
