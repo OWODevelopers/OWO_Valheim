@@ -245,5 +245,19 @@ namespace OWO_Valheim
                 }
             }
         }
+
+        [HarmonyPatch(typeof(WearNTear), "Repair")]
+        class OnReapir
+        {
+            public static void Postfix(WearNTear __instance, bool __result)
+            {
+                if (!owoSkin.CanFeel()) return;
+                Piece component = __instance.GetComponent<Piece>();
+                if (__result && component != null && component == Player.m_localPlayer.GetHoveringPiece())
+                {
+                    owoSkin.Feel("Repair");
+                }
+            }
+        }
     }
 }
