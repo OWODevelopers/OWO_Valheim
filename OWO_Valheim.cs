@@ -255,7 +255,21 @@ namespace OWO_Valheim
                 Piece component = __instance.GetComponent<Piece>();
                 if (__result && component != null && component == Player.m_localPlayer.GetHoveringPiece())
                 {
-                    owoSkin.Feel("Repair");
+                    owoSkin.Feel("Hammer");
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(WearNTear), "OnPlaced")]
+        class OnPlaceHammer
+        {
+            public static void Postfix(WearNTear __instance)
+            {
+                if (!owoSkin.CanFeel()) return;
+                Piece component = __instance.GetComponent<Piece>();
+                if (component != null && component.IsCreator())
+                {
+                    owoSkin.Feel("Hammer");
                 }
             }
         }
