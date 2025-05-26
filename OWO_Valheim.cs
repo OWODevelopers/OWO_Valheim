@@ -2,6 +2,7 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using System;
+using UnityEngine;
 
 namespace OWO_Valheim
 {
@@ -166,6 +167,18 @@ namespace OWO_Valheim
 
                 if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer || !__result) return;
                 owoSkin.Feel("Block");
+            }
+        }
+
+        [HarmonyPatch(typeof(Character), "ApplyDamage")]
+        class OnPlayerHit
+        {
+            public static void Postfix(Character __instance, HitData hit)
+            {
+
+                if (__instance != Player.m_localPlayer || !owoSkin.CanFeel()) return;
+
+                owoSkin.Feel("Impact");
             }
         }
     }
