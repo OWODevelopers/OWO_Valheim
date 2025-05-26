@@ -208,5 +208,15 @@ namespace OWO_Valheim
                 }
             }
         }
+
+        [HarmonyPatch(typeof(Thunder), "DoThunder")]
+        class OnThunder
+        {
+            public static void Postfix()
+            {
+                if (!owoSkin.CanFeel()) return;
+                owoSkin.Feel("Thunder");
+            }
+        }
     }
 }
