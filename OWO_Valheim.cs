@@ -157,5 +157,16 @@ namespace OWO_Valheim
                 }
             }
         }
+
+        [HarmonyPatch(typeof(Humanoid), "BlockAttack")]
+        class OnBlocking
+        {
+            public static void Postfix(Humanoid __instance, bool __result)
+            {
+
+                if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer || !__result) return;
+                owoSkin.Feel("Block");
+            }
+        }
     }
 }
