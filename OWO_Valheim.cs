@@ -2,7 +2,9 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace OWO_Valheim
 {
@@ -115,9 +117,93 @@ namespace OWO_Valheim
         [HarmonyPatch(typeof(Attack), nameof(Attack.OnAttackTrigger))]
         class OnWeaponAttack
         {
-            public static void Postfix(Attack __instance, ref Humanoid ___m_character, ref ItemDrop.ItemData ___m_weapon)
+            public static Dictionary<string, float> rangeBoss = new Dictionary<string, float>()
+        {
+            {"boss_eikthyr",  20f},
+            {"boss_gdking", 40f },
+            {"boss_bonemass",  20f},
+            {"boss_moder",  40f},
+            {"boss_goblinking",  60f},
+        };
+            public static void Postfix(Attack __instance, Humanoid ___m_character, ItemDrop.ItemData ___m_weapon)
             {
-                if (___m_character != Player.m_localPlayer || !owoSkin.CanFeel()) return;
+                if (!owoSkin.CanFeel()) return;
+
+                if (___m_character.IsBoss()) goto Boss;
+
+                if (___m_character != Player.m_localPlayer) goto Player;
+
+                return;
+
+
+                Boss:
+                float range = (rangeBoss.ContainsKey(___m_character.m_bossEvent)) ? rangeBoss[___m_character.m_bossEvent] : 20f;
+                bool closeTo = (Vector3.Distance(Player.m_localPlayer.transform.position, ___m_character.transform.position) < (double)range);
+
+                if (!closeTo) return;
+
+                switch (___m_character.m_bossEvent)
+                {
+                    case "boss_eikthyr":
+                        if (__instance.m_attackAnimation == "attack2")
+                        {
+                            owoSkin.Feel("EikthyrE lectric");
+                        }
+                        if (__instance.m_attackAnimation == "attack_stomp")
+                        {
+                            owoSkin.Feel("Eikthyr Electric");
+                        }
+                        break;
+                    case "boss_gdking":
+                        if (__instance.m_attackAnimation == "spawn")
+                        {
+                            owoSkin.Feel("Elder Spawn");
+                        }
+                        if (__instance.m_attackAnimation == "stomp")
+                        {
+                            owoSkin.Feel("Elder Stomp");
+                        }
+                        if (__instance.m_attackAnimation == "shoot")
+                        {
+                            owoSkin.Feel("Elder Shoot");
+                        }
+                        break;
+                    case "boss_bonemass":
+                        if (__instance.m_attackAnimation == "aoe")
+                        {
+                            owoSkin.Feel("Bonemass1");
+                        }
+                        break;
+                    case "boss_moder":
+                        if (__instance.m_attackAnimation == "attack_iceball")
+                        {
+                            owoSkin.Feel("Moder Ice Balls");
+                        }
+                        if (__instance.m_attackAnimation == "attack_breath")
+                        {
+                            owoSkin.Feel("Moder Beam");
+                        }
+                        break;
+                    case "boss_goblinking":
+                        if (__instance.m_attackAnimation == "beam")
+                        {
+                            owoSkin.Feel("Yagluth Beam");
+                        }
+                        if (__instance.m_attackAnimation == "nova")
+                        {
+                            owoSkin.Feel("Yagluth Nova");
+                        }
+                        if (__instance.m_attackAnimation == "cast1")
+                        {
+                            owoSkin.Feel("Yagluth Meteor");
+                        }
+                        break;
+
+                }
+                return;
+
+
+            Player:
                 owoSkin.LOG($"HUMANOID {___m_weapon.m_shared.m_itemType} -- {___m_weapon.m_shared.m_animationState} -- {___m_weapon.m_shared.m_name}");
                 switch (___m_weapon.m_shared.m_itemType)
                 {
@@ -133,6 +219,7 @@ namespace OWO_Valheim
                         owoSkin.Feel("Attack");
                         break;
                 }
+                return;
             }
         }
 
@@ -307,7 +394,8 @@ namespace OWO_Valheim
                             owoSkin.StartRaining();
                         }
                     }
-                }else if (owoSkin.rainingIsActive)
+                }
+                else if (owoSkin.rainingIsActive)
                 {
                     int endDelay = (int)new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds() - envStarted;
                     if (endDelay > envDelay)
