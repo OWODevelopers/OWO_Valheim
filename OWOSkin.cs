@@ -18,6 +18,7 @@ namespace OWO_Valheim
 
         public bool heartBeatIsActive = false;
         public bool teleportIsActive = false;
+        public bool rainingIsActive = false;
 
         public Dictionary<string, Sensation> SensationsMap { get => sensationsMap; set => sensationsMap = value; }
 
@@ -242,6 +243,32 @@ namespace OWO_Valheim
             while (teleportIsActive)
             {
                 Feel("Teleporting", 0);
+                await Task.Delay(1000);
+            }
+        }
+
+        #endregion       
+        
+        #region Teleporting
+
+        public void StartRaining()
+        {
+            if (rainingIsActive) return;
+
+            rainingIsActive = true;
+            RainingFuncAsync();
+        }
+
+        public void StopRaining()
+        {
+            rainingIsActive = false;
+        }
+
+        public async Task RainingFuncAsync()
+        {
+            while (rainingIsActive)
+            {
+                Feel("Raining", 0);
                 await Task.Delay(1000);
             }
         }

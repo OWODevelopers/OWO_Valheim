@@ -2,7 +2,7 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using System;
-using UnityEngine;
+using System.Linq;
 
 namespace OWO_Valheim
 {
@@ -188,7 +188,7 @@ namespace OWO_Valheim
             public static void Postfix(Player __instance, bool __result, ref bool ___m_teleporting)
             {
                 if (__instance != Player.m_localPlayer || !owoSkin.CanFeel() || !__result) return;
-                
+
                 if (___m_teleporting)
                 {
                     owoSkin.StartTeleporting();
@@ -199,7 +199,7 @@ namespace OWO_Valheim
         [HarmonyPatch(typeof(Player), "UpdateTeleport")]
         class OnTeleportUpdate
         {
-            public static void Postfix(Player __instance,ref bool ___m_teleporting)
+            public static void Postfix(Player __instance, ref bool ___m_teleporting)
             {
                 if (__instance != Player.m_localPlayer || !owoSkin.CanFeel()) return;
                 if (!___m_teleporting)
@@ -270,6 +270,50 @@ namespace OWO_Valheim
                 if (component != null && component.IsCreator())
                 {
                     owoSkin.Feel("Hammer");
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(EnvMan), "UpdateEnvironment")]
+        class OnEnvChange
+        {
+            private static readonly string[] rain = { "ThunderStorm", "Rain" };
+            private static string currentEnv = "";
+            private static int envStarted = 0;
+            //when env is changing, there is a delay between effective change of env in the code,
+            //and rain actually showing on screen
+            private static readonly int envDelay = 12;
+            public static void Postfix(EnvSetup ___m_currentEnv)
+            {
+                if (!owoSkin.CanFeel() || !Player.m_localPlayer) return;
+
+                if (currentEnv != ___m_currentEnv.m_name)
+                {
+                    currentEnv = ___m_currentEnv.m_name;
+                    envStarted = (int)new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+                }
+
+                if (rain.Contains(currentEnv))
+                {
+                    if (Player.m_localPlayer.InShelter())
+                    {
+                        owoSkin.StopRaining();
+                    }
+                    else if (!owoSkin.rainingIsActive)
+                    {
+                        int startDelay = (int)new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds() - envStarted;
+                        if (startDelay > envDelay)
+                        {
+                            owoSkin.StartRaining();
+                        }
+                    }
+                }else if (owoSkin.rainingIsActive)
+                {
+                    int endDelay = (int)new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds() - envStarted;
+                    if (endDelay > envDelay)
+                    {
+                        owoSkin.StopRaining();
+                    }
                 }
             }
         }
