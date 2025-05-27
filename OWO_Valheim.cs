@@ -316,6 +316,16 @@ namespace OWO_Valheim
                     }
                 }
             }
+
+            [HarmonyPatch(typeof(Player), "SetGuardianPower")]
+            class OnSetGuardianPower
+            {
+                public static void Postfix(Player __instance, bool ___m_isLoading)
+                {
+                    if (!owoSkin.CanFeel() || Player.m_localPlayer != __instance || ___m_isLoading) return;
+                    owoSkin.Feel("Set Guardian Power");
+                }
+            }
         }
     }
 }
