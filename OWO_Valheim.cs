@@ -109,7 +109,7 @@ namespace OWO_Valheim
 
                 if (Player.IsPlayerInRange(__instance.transform.position, 10f, Player.m_localPlayer.GetPlayerID()))
                 {
-                    owoSkin.Feel("SuperPower");
+                    owoSkin.Feel("Super Power");
                 }
             }
         }
