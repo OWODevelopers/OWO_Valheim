@@ -131,7 +131,7 @@ namespace OWO_Valheim
 
                 if (___m_character.IsBoss()) goto Boss;
 
-                if (___m_character != Player.m_localPlayer) goto Player;
+                if (___m_character == Player.m_localPlayer) goto Player;
 
                 return;
 
@@ -413,6 +413,34 @@ namespace OWO_Valheim
                     if (!owoSkin.CanFeel() || Player.m_localPlayer != __instance || ___m_isLoading) return;
                     owoSkin.Feel("Set Guardian Power");
                 }
+            }
+        }
+
+        /*
+        [HarmonyPatch(typeof(Character), "ApplyDamage")]
+        class Character_ApplyDamage_Patch
+        {
+            public static void Postfix(Character __instance, HitData hit)
+            {
+
+                if (__instance != Player.m_localPlayer || BhapticsTactsuit.suitDisabled)
+                {
+                    return;
+                }
+                var coords = BhapticsTactsuit.getAngleAndShift(Player.m_localPlayer, hit.m_point);
+                BhapticsTactsuit.PlayBackHit("Impact", coords.angle, coords.shift);
+            }
+        }
+        */
+       
+        [HarmonyPatch(typeof(OfferingBowl), "SpawnBoss")]
+        class Character_ApplyDamage_Patch
+        {
+            public static void Postfix(OfferingBowl __instance, Vector3 spawnPoint)
+            {
+
+                if (!Player.IsPlayerInRange(spawnPoint, 100f, Player.m_localPlayer.GetPlayerID()) || !owoSkin.CanFeel()) return;
+                owoSkin.Feel("Boss Spawn");
             }
         }
     }
