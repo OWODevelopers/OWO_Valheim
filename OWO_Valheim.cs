@@ -264,8 +264,8 @@ namespace OWO_Valheim
             {
 
                 if (__instance != Player.m_localPlayer || !owoSkin.CanFeel()) return;
-
-                owoSkin.Feel("Impact");
+                if (Mathf.FloorToInt(hit.GetTotalDamage()) > 0)
+                    owoSkin.Feel("Impact");
             }
         }
 
@@ -415,23 +415,6 @@ namespace OWO_Valheim
                 }
             }
         }
-
-        /*
-        [HarmonyPatch(typeof(Character), "ApplyDamage")]
-        class Character_ApplyDamage_Patch
-        {
-            public static void Postfix(Character __instance, HitData hit)
-            {
-
-                if (__instance != Player.m_localPlayer || BhapticsTactsuit.suitDisabled)
-                {
-                    return;
-                }
-                var coords = BhapticsTactsuit.getAngleAndShift(Player.m_localPlayer, hit.m_point);
-                BhapticsTactsuit.PlayBackHit("Impact", coords.angle, coords.shift);
-            }
-        }
-        */
 
         [HarmonyPatch(typeof(OfferingBowl), "SpawnBoss")]
         class Character_ApplyDamage_Patch
