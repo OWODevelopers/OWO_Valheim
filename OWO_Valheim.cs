@@ -432,7 +432,7 @@ namespace OWO_Valheim
             }
         }
         */
-       
+
         [HarmonyPatch(typeof(OfferingBowl), "SpawnBoss")]
         class Character_ApplyDamage_Patch
         {
@@ -441,6 +441,29 @@ namespace OWO_Valheim
 
                 if (!Player.IsPlayerInRange(spawnPoint, 100f, Player.m_localPlayer.GetPlayerID()) || !owoSkin.CanFeel()) return;
                 owoSkin.Feel("Boss Spawn");
+            }
+        }
+
+        [HarmonyPatch(typeof(Ragdoll), "DestroyNow")]
+        class OnCorpseExplosion
+        {
+            public static void Postfix(Ragdoll __instance)
+            {
+                if (!owoSkin.CanFeel() || !Player.IsPlayerInRange(__instance.transform.position, 20f, Player.m_localPlayer.GetPlayerID())) return;
+                foreach (EffectList.EffectData obj in __instance.m_removeEffect.m_effectPrefabs)
+                {
+                    switch (obj.m_prefab.name)
+                    {
+                        case "vfx_corpse_destruction_medium":
+                            goto SendSensation;
+                        case "vfx_corpse_destruction_small":
+                            if (!Player.IsPlayerInRange(__instance.transform.position, 10f, Player.m_localPlayer.GetPlayerID())) return;
+                            goto SendSensation;
+                    }
+                }
+
+            SendSensation:
+                owoSkin.Feel("Explosion");
             }
         }
     }
