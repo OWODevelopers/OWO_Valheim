@@ -136,9 +136,9 @@ namespace OWO_Valheim
                 return;
 
 
-                Boss:
+            Boss:
                 float range = (rangeBoss.ContainsKey(___m_character.m_bossEvent)) ? rangeBoss[___m_character.m_bossEvent] : 20f;
-                bool closeTo = (Vector3.Distance(Player.m_localPlayer.transform.position, ___m_character.transform.position) < (double)range);
+                bool closeTo = Player.IsPlayerInRange(___m_character.transform.position, range, Player.m_localPlayer.GetPlayerID());
 
                 if (!closeTo) return;
 
