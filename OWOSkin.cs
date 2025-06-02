@@ -12,6 +12,7 @@ namespace OWO_Valheim
     {
 
         private bool suitEnabled = false;
+        public bool playerEnabled = false;
         private string modPath = "BepInEx\\Plugins";
         private Dictionary<String, Sensation> sensationsMap = new Dictionary<String, Sensation>();
         private Dictionary<String, Muscle[]> muscleMap = new Dictionary<String, Muscle[]>();
@@ -198,7 +199,7 @@ namespace OWO_Valheim
 
         public bool CanFeel()
         {
-            return suitEnabled;
+            return suitEnabled && playerEnabled;
         }
 
         #region Loops

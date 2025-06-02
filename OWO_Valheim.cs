@@ -199,14 +199,16 @@ namespace OWO_Valheim
             {
                 if (__instance != Player.m_localPlayer || !owoSkin.CanFeel()) return;
                 int hp = Convert.ToInt32(__instance.GetHealth() * 100 / __instance.GetMaxHealth());
-                if (hp < 20 && hp > 0)
-                {
-                    owoSkin.StartHeartBeat();
-                }
-                else if (hp <= 0)
+
+                if (hp <= 0)
                 {
                     owoSkin.StopAllHapticFeedback();
+                    owoSkin.playerEnabled = false;
                     owoSkin.Feel("Death");
+                }
+                else if (hp < 20 && hp > 0)
+                {
+                    owoSkin.StartHeartBeat();
                 }
                 else
                 {
@@ -419,7 +421,7 @@ namespace OWO_Valheim
                 owoSkin.Feel("Explosion");
             }
         }
-        
+
         [HarmonyPatch(typeof(Humanoid), "GetAttackDrawPercentage")]
         class OnDrawBow
         {
@@ -434,6 +436,17 @@ namespace OWO_Valheim
 
                 owoSkin.stringBowIntensity = Mathf.FloorToInt(Mathf.Clamp(__result * 100, 40f, 100f));
                 owoSkin.StartStringBow();
+            }
+        }
+
+        [HarmonyPatch(typeof(Player), "OnSpawned")]
+        class OnPlayerSpawn
+        {
+            public static void Postfix(Player __instance)
+            {
+                if (__instance != Player.m_localPlayer) return;
+
+                owoSkin.playerEnabled = true;
             }
         }
     }
