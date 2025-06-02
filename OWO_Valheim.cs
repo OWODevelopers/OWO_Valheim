@@ -116,55 +116,55 @@ namespace OWO_Valheim
                     case "boss_eikthyr":
                         if (__instance.m_attackAnimation == "attack2")
                         {
-                            owoSkin.Feel("Eikthyr Electric");
+                            owoSkin.Feel("Earthquake");
                         }
                         if (__instance.m_attackAnimation == "attack_stomp")
                         {
-                            owoSkin.Feel("Eikthyr Electric222222222222");
+                            owoSkin.Feel("Earthquake");
                         }
                         break;
                     case "boss_gdking":
                         if (__instance.m_attackAnimation == "spawn")
                         {
-                            owoSkin.Feel("Elder Spawn");
+                            owoSkin.Feel("Earthquake");
                         }
                         if (__instance.m_attackAnimation == "stomp")
                         {
-                            owoSkin.Feel("Elder Stomp");
+                            owoSkin.Feel("Earthquake");
                         }
                         if (__instance.m_attackAnimation == "shoot")
                         {
-                            owoSkin.Feel("Elder Shoot");
+                            owoSkin.Feel("Earthquake");
                         }
                         break;
                     case "boss_bonemass":
                         if (__instance.m_attackAnimation == "aoe")
                         {
-                            owoSkin.Feel("Bonemass");
+                            owoSkin.Feel("Earthquake");
                         }
                         break;
                     case "boss_moder":
                         if (__instance.m_attackAnimation == "attack_iceball")
                         {
-                            owoSkin.Feel("Moder Ice Balls");
+                            owoSkin.Feel("Earthquake");
                         }
                         if (__instance.m_attackAnimation == "attack_breath")
                         {
-                            owoSkin.Feel("Moder Beam");
+                            owoSkin.Feel("Earthquake");
                         }
                         break;
                     case "boss_goblinking":
                         if (__instance.m_attackAnimation == "beam")
                         {
-                            owoSkin.Feel("Yagluth Beam");
+                            owoSkin.Feel("Earthquake");
                         }
                         if (__instance.m_attackAnimation == "nova")
                         {
-                            owoSkin.Feel("Yagluth Nova");
+                            owoSkin.Feel("Earthquake");
                         }
                         if (__instance.m_attackAnimation == "cast1")
                         {
-                            owoSkin.Feel("Yagluth Meteor");
+                            owoSkin.Feel("Earthquake");
                         }
                         break;
 
