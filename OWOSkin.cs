@@ -190,6 +190,9 @@ namespace OWO_Valheim
         public void StopAllHapticFeedback()
         {
             StopHeartBeat();
+            StopRaining();
+            StopStringBow();
+            StopTeleporting();
             OWO.Stop();
         }
 
@@ -252,7 +255,7 @@ namespace OWO_Valheim
 
         #endregion       
         
-        #region Teleporting
+        #region Raining
 
         public void StartRaining()
         {
@@ -277,7 +280,6 @@ namespace OWO_Valheim
         }
 
         #endregion
-
 
         #region StringBow
         public void StartStringBow()
