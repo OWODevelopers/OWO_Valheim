@@ -64,37 +64,6 @@ namespace OWO_Valheim
                 }
                 if (EffectName != "")
                 {
-                    //Posible loop
-                    owoSkin.Feel(EffectName);
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(StatusEffect), "Stop")]
-        class OnStatusEffectStop
-        {
-            public static void Postfix(StatusEffect __instance)
-            {
-                if (!owoSkin.CanFeel() || __instance.m_character != Player.m_localPlayer) return;
-                string EffectName = "";
-                switch (__instance.m_name)
-                {
-                    case "$se_puke_name":
-                        EffectName = "Vomit";
-                        break;
-                    case "$se_poison_name":
-                        EffectName = "Poison";
-                        break;
-                    case "$se_burning_name":
-                        EffectName = "Flame";
-                        break;
-                    case "$se_freezing_name":
-                        EffectName = "Freezing";
-                        break;
-                }
-                if (EffectName != "")
-                {
-                    //Stop Loop
                     owoSkin.Feel(EffectName);
                 }
             }
