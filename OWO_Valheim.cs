@@ -147,11 +147,11 @@ namespace OWO_Valheim
                     case "boss_eikthyr":
                         if (__instance.m_attackAnimation == "attack2")
                         {
-                            owoSkin.Feel("EikthyrE lectric");
+                            owoSkin.Feel("Eikthyr Electric");
                         }
                         if (__instance.m_attackAnimation == "attack_stomp")
                         {
-                            owoSkin.Feel("Eikthyr Electric");
+                            owoSkin.Feel("Eikthyr Electric222222222222");
                         }
                         break;
                     case "boss_gdking":
@@ -171,7 +171,7 @@ namespace OWO_Valheim
                     case "boss_bonemass":
                         if (__instance.m_attackAnimation == "aoe")
                         {
-                            owoSkin.Feel("Bonemass1");
+                            owoSkin.Feel("Bonemass");
                         }
                         break;
                     case "boss_moder":
@@ -278,6 +278,7 @@ namespace OWO_Valheim
 
                 if (___m_teleporting)
                 {
+                    owoSkin.StopAllHapticFeedback();
                     owoSkin.StartTeleporting();
                 }
             }
@@ -417,7 +418,7 @@ namespace OWO_Valheim
         }
 
         [HarmonyPatch(typeof(OfferingBowl), "SpawnBoss")]
-        class Character_ApplyDamage_Patch
+        class OnBossSpawn
         {
             public static void Postfix(OfferingBowl __instance, Vector3 spawnPoint)
             {
