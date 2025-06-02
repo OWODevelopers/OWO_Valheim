@@ -440,13 +440,30 @@ namespace OWO_Valheim
                         case "vfx_corpse_destruction_medium":
                             goto SendSensation;
                         case "vfx_corpse_destruction_small":
-                            if (!Player.IsPlayerInRange(__instance.transform.position, 10f, Player.m_localPlayer.GetPlayerID())) return;
+                            if (!Player.IsPlayerInRange(__instance.transform.position, 7f, Player.m_localPlayer.GetPlayerID())) return;
                             goto SendSensation;
                     }
                 }
 
             SendSensation:
                 owoSkin.Feel("Explosion");
+            }
+        }
+        
+        [HarmonyPatch(typeof(Humanoid), "GetAttackDrawPercentage")]
+        class OnDrawBow
+        {
+            public static void Postfix(Humanoid __instance, float __result)
+            {
+                if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer) return;
+                if (__result == 0f)
+                {
+                    owoSkin.StopStringBow();
+                    return;
+                }
+
+                owoSkin.stringBowIntensity = Mathf.FloorToInt(Mathf.Clamp(__result * 100, 40f, 100f));
+                owoSkin.StartStringBow();
             }
         }
     }

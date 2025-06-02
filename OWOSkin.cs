@@ -16,9 +16,12 @@ namespace OWO_Valheim
         private Dictionary<String, Sensation> sensationsMap = new Dictionary<String, Sensation>();
         private Dictionary<String, Muscle[]> muscleMap = new Dictionary<String, Muscle[]>();
 
+        public int stringBowIntensity = 40;
+
         public bool heartBeatIsActive = false;
         public bool teleportIsActive = false;
         public bool rainingIsActive = false;
+        public bool stringBowIsActive = false;
 
         public Dictionary<string, Sensation> SensationsMap { get => sensationsMap; set => sensationsMap = value; }
 
@@ -273,6 +276,31 @@ namespace OWO_Valheim
             }
         }
 
+        #endregion
+
+
+        #region StringBow
+        public void StartStringBow()
+        {
+            if (stringBowIsActive) return;
+
+            stringBowIsActive = true;
+            StringBowFuncAsync();
+        }
+
+        public void StopStringBow()
+        {
+            stringBowIsActive = false;
+        }
+
+        public async Task StringBowFuncAsync()
+        {
+            while (stringBowIsActive)
+            {
+                Feel("Bow Pull", 0, stringBowIntensity);
+                await Task.Delay(250);
+            }
+        }
         #endregion
 
 
