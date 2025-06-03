@@ -176,16 +176,12 @@ namespace OWO_Valheim
                 owoSkin.LOG($"HUMANOID {___m_weapon.m_shared.m_itemType} -- {___m_weapon.m_shared.m_animationState} -- {___m_weapon.m_shared.m_name}");
                 switch (___m_weapon.m_shared.m_itemType)
                 {
-                    case ItemDrop.ItemData.ItemType.OneHandedWeapon:
-                    case ItemDrop.ItemData.ItemType.Tool:
-                        owoSkin.Feel("Attack", 3);
-                        break;
                     case ItemDrop.ItemData.ItemType.TwoHandedWeapon:
                     case ItemDrop.ItemData.ItemType.Bow:
-                        owoSkin.Feel("Attack", 3);
+                        owoSkin.FeelWithMuscles("Attack","Both Arms", 3);
                         break;
-                    case ItemDrop.ItemData.ItemType.Shield:
-                        owoSkin.Feel("Attack", 3);
+                    default:
+                        owoSkin.FeelWithMuscles("Attack","Right Arm", 3);
                         break;
                 }
                 return;
