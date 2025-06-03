@@ -467,8 +467,6 @@ namespace OWO_Valheim
             public static void Postfix(Player __instance, bool ___m_groundContact)
             {
                 if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer) return;
-                //owoSkin.Feel("Landing", 1);
-
                 if (owoSkin.isJumping && ___m_groundContact)
                 {
                     owoSkin.isJumping = false;
@@ -476,16 +474,5 @@ namespace OWO_Valheim
                 }
             }
         }
-
-        //[HarmonyPatch(typeof(Player), "Dodge")]
-        //class OnPlayerDodge
-        //{
-        //    public static void Postfix(Character __instance)
-        //    {
-        //        if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer) return;
-        //        owoSkin.Feel("Dodge", 2);
-        //    }
-        //}
-
     }
 }
