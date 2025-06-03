@@ -12,7 +12,7 @@
 11~Boss Spawn~70,10,70,0,0,0,Explosion|0%100,1%100,3%100,2%100,4%70,6%100,9%100,7%100,8%100,5%70~environment-7~Interactable#
 12~Pet~20,1,40,0,0,1,Pat|0%100,4%80&20,1,40,0,0,0,Pat|0%100,4%80~interaction-3~Interactable#
 13~Jump~60,1,60,0,100,0,Fall|9%100,8%100,3%100,2%100~environment-5~Interactable#
-14~Landing~40,2,70,0,0,0,Land|9%100,8%100,2%100,3%100~environment-5~Interactable#
+14~Landing~40,2,60,0,0,0,Land|9%100,8%100,2%100,3%100~environment-5~Interactable#
 15~Hammer~20,1,30,0,0,0,Drops|0%100,4%80~weapon-0~Interactable#
 16~Block~90,1,70,0,0,0,Hit|0%100,5%80,1%100,4%80,3%70,2%70~impact-10~Fight#
 17~Attack~70,1,80,0,0,0,Hit~weapon-0~Fight#

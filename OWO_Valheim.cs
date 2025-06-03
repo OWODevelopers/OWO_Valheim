@@ -456,23 +456,26 @@ namespace OWO_Valheim
             public static void Postfix(Player __instance)
             {
                 if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer) return;
+                owoSkin.isJumping = true;
                 owoSkin.Feel("Jump", 2);
             }
         }
 
-        //[HarmonyPatch(typeof(Character), "OnCollisionStay")]
-        //class OnPlayerLand
-        //{
-        //    public static void Postfix(Player __instance, bool ___m_groundContact)
-        //    {
-        //        if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer) return;
-        //        //owoSkin.Feel("Landing", 1);
-                
-        //        if (___m_groundContact)
-        //        {
-        //        }
-        //    }
-        //}
+        [HarmonyPatch(typeof(Character), "OnCollisionStay")]
+        class OnPlayerLand
+        {
+            public static void Postfix(Player __instance, bool ___m_groundContact)
+            {
+                if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer) return;
+                //owoSkin.Feel("Landing", 1);
+
+                if (owoSkin.isJumping && ___m_groundContact)
+                {
+                    owoSkin.isJumping = false;
+                    owoSkin.Feel("Landing");
+                }
+            }
+        }
 
         //[HarmonyPatch(typeof(Player), "Dodge")]
         //class OnPlayerDodge

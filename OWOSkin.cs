@@ -18,6 +18,7 @@ namespace OWO_Valheim
         private Dictionary<String, Muscle[]> muscleMap = new Dictionary<String, Muscle[]>();
 
         public int stringBowIntensity = 40;
+        public bool isJumping = false;
 
         public bool heartBeatIsActive = false;
         public bool teleportIsActive = false;
