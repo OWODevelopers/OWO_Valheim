@@ -16,5 +16,5 @@
 15~Hammer~20,1,30,0,0,0,Drops|0%100,4%80~weapon-0~Interactable#
 16~Block~90,1,70,0,0,0,Hit|0%100,5%80,1%100,4%80,3%70,2%70~impact-10~Fight#
 17~Attack~70,1,80,0,0,0,Hit~weapon-0~Fight#
-18~String Bow~43,8,100,500,0,0,Tension|0%84,5%77,4%93,1%58,6%67,7%74~weapon-5~Fight#
+18~String Bow~43,3,100,0,0,0,Tension|0%84,5%77,1%58,6%67,7%74,4%70~weapon-5~Fight#
 19~Earthquake~60,9,70,0,500,0,Numbness|0%60,3%100,2%100,8%100,9%100,7%60,6%60,1%60~weapon-0~Fight

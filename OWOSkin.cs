@@ -64,10 +64,10 @@ namespace OWO_Valheim
         }
         private void DefineAllMuscleGroups()
         {
-            Muscle[] leftArm = { Muscle.Arm_L.WithIntensity(100), Muscle.Pectoral_L.WithIntensity(70), Muscle.Dorsal_L.WithIntensity(50) };
+            Muscle[] leftArm = { Muscle.Arm_L.WithIntensity(70), Muscle.Pectoral_L.WithIntensity(90), Muscle.Dorsal_L.WithIntensity(70) };
             muscleMap.Add("Left Arm", leftArm);
 
-            Muscle[] rightArm = { Muscle.Arm_R.WithIntensity(100), Muscle.Pectoral_R.WithIntensity(70), Muscle.Dorsal_R.WithIntensity(50) };
+            Muscle[] rightArm = { Muscle.Arm_R.WithIntensity(70), Muscle.Pectoral_R.WithIntensity(90), Muscle.Dorsal_R.WithIntensity(70) };
             muscleMap.Add("Right Arm", rightArm);
 
             Muscle[] bothArms = leftArm.Concat(rightArm).ToArray();
@@ -301,7 +301,7 @@ namespace OWO_Valheim
         {
             while (stringBowIsActive)
             {
-                Feel("Bow Pull", 1, stringBowIntensity);
+                Feel("String Bow", 1, stringBowIntensity);
                 await Task.Delay(250);
             }
         }
