@@ -1,5 +1,5 @@
 # OWO_Valheim
-OWO Valheim integration. This mod is based on the work of [this file](https://github.com/brandonmousseau/vhvr-mod/blob/master/ValheimVRMod/Patches/BHapticsPatches.cs) of [brandonmousseau/vhvr-mod](https://github.com/brandonmousseau/vhvr-mod)
+OWO Valheim integration. This mod is based on [this file](https://github.com/brandonmousseau/vhvr-mod/blob/master/ValheimVRMod/Patches/BHapticsPatches.cs) of [brandonmousseau/vhvr-mod](https://github.com/brandonmousseau/vhvr-mod)
 
 ## What is OWO?
 OWO Skin is a haptic technology that lets you feel everything that happens in a video game.  
