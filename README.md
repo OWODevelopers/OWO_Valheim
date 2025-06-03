@@ -1,5 +1,5 @@
 # OWO_Valheim
-OWO Valheim integration 
+OWO Valheim integration. This mod is based on the work of [this file](https://github.com/brandonmousseau/vhvr-mod/blob/master/ValheimVRMod/Patches/BHapticsPatches.cs) of [brandonmousseau/vhvr-mod](https://github.com/brandonmousseau/vhvr-mod)
 
 ## What is OWO?
 OWO Skin is a haptic technology that lets you feel everything that happens in a video game.  
@@ -16,6 +16,21 @@ Want to get an OWO Suit? [Look here](https://owogame.com/shop/).
 
 # Featured effect
 - Heart Beat
+- Attack
+- Block
+- Impact
+- Pet
+- Rain
+- Thunder
+- Teleport
+- String Bow
+- Eat
+- Set/Use Guardian Power
+- Boss Spawn
+- Boss Attacks
+- Ship Damage
+- Death
+- Corpse Explosion
 
 # Manual Connection
 If you are having trouble with the automatic connection, create a .txt file called OWO_Manual_IP.txt  
