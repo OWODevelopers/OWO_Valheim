@@ -249,8 +249,8 @@ namespace OWO_Valheim
         {
             while (teleportIsActive)
             {
-                Feel("Teleporting", 0);
-                await Task.Delay(1000);
+                Feel("Teleporting", 2);
+                await Task.Delay(900);
             }
         }
 
@@ -276,7 +276,7 @@ namespace OWO_Valheim
             while (rainingIsActive)
             {
                 Feel("Raining", 0);
-                await Task.Delay(1000);
+                await Task.Delay(500);
             }
         }
 
@@ -300,7 +300,7 @@ namespace OWO_Valheim
         {
             while (stringBowIsActive)
             {
-                Feel("Bow Pull", 0, stringBowIntensity);
+                Feel("Bow Pull", 1, stringBowIntensity);
                 await Task.Delay(250);
             }
         }

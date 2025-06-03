@@ -36,7 +36,7 @@ namespace OWO_Valheim
             public static void Postfix(Player __instance)
             {
                 if (__instance != Player.m_localPlayer || !owoSkin.CanFeel()) return;
-                owoSkin.Feel("Eating");
+                owoSkin.Feel("Eating", 2);
             }
         }
 
@@ -78,7 +78,7 @@ namespace OWO_Valheim
 
                 if (Player.IsPlayerInRange(__instance.transform.position, 10f, Player.m_localPlayer.GetPlayerID()))
                 {
-                    owoSkin.Feel("Super Power");
+                    owoSkin.Feel("Super Power", 2);
                 }
             }
         }
@@ -116,55 +116,55 @@ namespace OWO_Valheim
                     case "boss_eikthyr":
                         if (__instance.m_attackAnimation == "attack2")
                         {
-                            owoSkin.Feel("Earthquake");
+                            owoSkin.Feel("Earthquake", 2);
                         }
                         if (__instance.m_attackAnimation == "attack_stomp")
                         {
-                            owoSkin.Feel("Earthquake");
+                            owoSkin.Feel("Earthquake", 2);
                         }
                         break;
                     case "boss_gdking":
                         if (__instance.m_attackAnimation == "spawn")
                         {
-                            owoSkin.Feel("Earthquake");
+                            owoSkin.Feel("Earthquake", 2);
                         }
                         if (__instance.m_attackAnimation == "stomp")
                         {
-                            owoSkin.Feel("Earthquake");
+                            owoSkin.Feel("Earthquake", 2);
                         }
                         if (__instance.m_attackAnimation == "shoot")
                         {
-                            owoSkin.Feel("Earthquake");
+                            owoSkin.Feel("Earthquake", 2);
                         }
                         break;
                     case "boss_bonemass":
                         if (__instance.m_attackAnimation == "aoe")
                         {
-                            owoSkin.Feel("Earthquake");
+                            owoSkin.Feel("Earthquake", 2);
                         }
                         break;
                     case "boss_moder":
                         if (__instance.m_attackAnimation == "attack_iceball")
                         {
-                            owoSkin.Feel("Earthquake");
+                            owoSkin.Feel("Earthquake", 2);
                         }
                         if (__instance.m_attackAnimation == "attack_breath")
                         {
-                            owoSkin.Feel("Earthquake");
+                            owoSkin.Feel("Earthquake", 2);
                         }
                         break;
                     case "boss_goblinking":
                         if (__instance.m_attackAnimation == "beam")
                         {
-                            owoSkin.Feel("Earthquake");
+                            owoSkin.Feel("Earthquake", 2);
                         }
                         if (__instance.m_attackAnimation == "nova")
                         {
-                            owoSkin.Feel("Earthquake");
+                            owoSkin.Feel("Earthquake", 2);
                         }
                         if (__instance.m_attackAnimation == "cast1")
                         {
-                            owoSkin.Feel("Earthquake");
+                            owoSkin.Feel("Earthquake", 2);
                         }
                         break;
 
@@ -178,14 +178,14 @@ namespace OWO_Valheim
                 {
                     case ItemDrop.ItemData.ItemType.OneHandedWeapon:
                     case ItemDrop.ItemData.ItemType.Tool:
-                        owoSkin.Feel("Attack");
+                        owoSkin.Feel("Attack", 3);
                         break;
                     case ItemDrop.ItemData.ItemType.TwoHandedWeapon:
                     case ItemDrop.ItemData.ItemType.Bow:
-                        owoSkin.Feel("Attack");
+                        owoSkin.Feel("Attack", 3);
                         break;
                     case ItemDrop.ItemData.ItemType.Shield:
-                        owoSkin.Feel("Attack");
+                        owoSkin.Feel("Attack", 3);
                         break;
                 }
                 return;
@@ -204,7 +204,7 @@ namespace OWO_Valheim
                 {
                     owoSkin.StopAllHapticFeedback();
                     owoSkin.playerEnabled = false;
-                    owoSkin.Feel("Death");
+                    owoSkin.Feel("Death", 4);
                 }
                 else if (hp < 20 && hp > 0)
                 {
@@ -224,7 +224,7 @@ namespace OWO_Valheim
             {
 
                 if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer || !__result) return;
-                owoSkin.Feel("Block");
+                owoSkin.Feel("Block", 3);
             }
         }
 
@@ -236,7 +236,7 @@ namespace OWO_Valheim
 
                 if (__instance != Player.m_localPlayer || !owoSkin.CanFeel()) return;
                 if (Mathf.FloorToInt(hit.GetTotalDamage()) > 0)
-                    owoSkin.Feel("Impact");
+                    owoSkin.Feel("Impact", 3);
             }
         }
 
@@ -274,7 +274,7 @@ namespace OWO_Valheim
             public static void Postfix()
             {
                 if (!owoSkin.CanFeel()) return;
-                owoSkin.Feel("Thunder");
+                owoSkin.Feel("Thunder", 1);
             }
         }
 
@@ -286,7 +286,7 @@ namespace OWO_Valheim
                 if (!owoSkin.CanFeel()) return;
                 if (__result && !alt)
                 {
-                    owoSkin.Feel("Pet");
+                    owoSkin.Feel("Pet", 2);
                 }
             }
         }
@@ -300,7 +300,7 @@ namespace OWO_Valheim
                 Ship component = __instance.GetComponent<Ship>();
                 if (component != null && component.IsPlayerInBoat(Player.m_localPlayer))
                 {
-                    owoSkin.Feel("Ship Damage");
+                    owoSkin.Feel("Ship Damage", 3);
                 }
             }
         }
@@ -314,7 +314,7 @@ namespace OWO_Valheim
                 Piece component = __instance.GetComponent<Piece>();
                 if (__result && component != null && component == Player.m_localPlayer.GetHoveringPiece())
                 {
-                    owoSkin.Feel("Hammer");
+                    owoSkin.Feel("Hammer", 2);
                 }
             }
         }
@@ -328,7 +328,7 @@ namespace OWO_Valheim
                 Piece component = __instance.GetComponent<Piece>();
                 if (component != null && component.IsCreator())
                 {
-                    owoSkin.Feel("Hammer");
+                    owoSkin.Feel("Hammer", 2);
                 }
             }
         }
@@ -383,7 +383,7 @@ namespace OWO_Valheim
                 public static void Postfix(Player __instance, bool ___m_isLoading)
                 {
                     if (!owoSkin.CanFeel() || Player.m_localPlayer != __instance || ___m_isLoading) return;
-                    owoSkin.Feel("Set Guardian Power");
+                    owoSkin.Feel("Set Power", 2);
                 }
             }
         }
@@ -395,7 +395,7 @@ namespace OWO_Valheim
             {
 
                 if (!Player.IsPlayerInRange(spawnPoint, 100f, Player.m_localPlayer.GetPlayerID()) || !owoSkin.CanFeel()) return;
-                owoSkin.Feel("Boss Spawn");
+                owoSkin.Feel("Boss Spawn", 3);
             }
         }
 
@@ -418,7 +418,7 @@ namespace OWO_Valheim
                 }
 
             SendSensation:
-                owoSkin.Feel("Explosion");
+                owoSkin.Feel("Explosion", 2);
             }
         }
 
@@ -449,5 +449,40 @@ namespace OWO_Valheim
                 owoSkin.playerEnabled = true;
             }
         }
+
+        [HarmonyPatch(typeof(Player), "OnJump")]
+        class OnPlayerJump
+        {
+            public static void Postfix(Player __instance)
+            {
+                if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer) return;
+                owoSkin.Feel("Jump", 2);
+            }
+        }
+
+        //[HarmonyPatch(typeof(Character), "OnCollisionStay")]
+        //class OnPlayerLand
+        //{
+        //    public static void Postfix(Player __instance, bool ___m_groundContact)
+        //    {
+        //        if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer) return;
+        //        //owoSkin.Feel("Landing", 1);
+                
+        //        if (___m_groundContact)
+        //        {
+        //        }
+        //    }
+        //}
+
+        //[HarmonyPatch(typeof(Player), "Dodge")]
+        //class OnPlayerDodge
+        //{
+        //    public static void Postfix(Character __instance)
+        //    {
+        //        if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer) return;
+        //        owoSkin.Feel("Dodge", 2);
+        //    }
+        //}
+
     }
 }
