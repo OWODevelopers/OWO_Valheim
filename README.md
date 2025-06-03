@@ -31,6 +31,7 @@ Want to get an OWO Suit? [Look here](https://owogame.com/shop/).
 - Ship Damage
 - Death
 - Corpse Explosion
+- Jump
 
 # Manual Connection
 If you are having trouble with the automatic connection, create a .txt file called OWO_Manual_IP.txt  
