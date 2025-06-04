@@ -50,21 +50,21 @@ namespace OWO_Valheim
                 switch (__instance.m_name)
                 {
                     case "$se_puke_name":
-                        EffectName = "Vomit";
+                        EffectName = "Bad Effect";
                         break;
                     case "$se_poison_name":
-                        EffectName = "Poison";
+                        EffectName = "Bad Effect";
                         break;
                     case "$se_burning_name":
-                        EffectName = "Flame";
+                        EffectName = "Bad Effect";
                         break;
                     case "$se_freezing_name":
-                        EffectName = "Freezing";
+                        EffectName = "Bad Effect";
                         break;
                 }
                 if (EffectName != "")
                 {
-                    owoSkin.Feel(EffectName);
+                    owoSkin.Feel(EffectName, 2);
                 }
             }
         }
