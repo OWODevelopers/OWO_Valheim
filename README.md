@@ -32,6 +32,8 @@ Want to get an OWO Suit? [Look here](https://owogame.com/shop/).
 - Death
 - Corpse Explosion
 - Jump
+- Landing
+- Bad Status Effects
 
 # Manual Connection
 If you are having trouble with the automatic connection, create a .txt file called OWO_Manual_IP.txt  
