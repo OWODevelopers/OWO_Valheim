@@ -4,11 +4,12 @@ using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace OWO_Valheim
 {
-    [BepInPlugin("org.bepinex.plugins.OWO_Valheim", "OWO_Valheim", "1.0.0")]
+    [BepInPlugin("org.bepinex.plugins.OWO_Valheim", "OWO_Valheim", "1.1.0")]
     public class Plugin : BaseUnityPlugin
     {
 #pragma warning disable CS0109
@@ -33,9 +34,9 @@ namespace OWO_Valheim
         [HarmonyPatch(typeof(Player), "EatFood")]
         class OnEatingFood
         {
-            public static void Postfix(Player __instance)
+            public static void Postfix(Player __instance, bool __result)
             {
-                if (__instance != Player.m_localPlayer || !owoSkin.CanFeel()) return;
+                if (__instance != Player.m_localPlayer || !__result || !owoSkin.CanFeel()) return;
                 owoSkin.Feel("Eating", 2);
             }
         }
@@ -72,9 +73,9 @@ namespace OWO_Valheim
         [HarmonyPatch(typeof(Player), "ActivateGuardianPower")]
         class OnActiveGuardianPower
         {
-            public static void Postfix(Player __instance)
+            public static void Postfix(Player __instance, bool __result)
             {
-                if (!owoSkin.CanFeel()) return;
+                if (!__result || !owoSkin.CanFeel() || Player.m_localPlayer == null) return;
 
                 if (Player.IsPlayerInRange(__instance.transform.position, 10f, Player.m_localPlayer.GetPlayerID()))
                 {
@@ -96,6 +97,7 @@ namespace OWO_Valheim
         };
             public static void Postfix(Attack __instance, Humanoid ___m_character, ItemDrop.ItemData ___m_weapon)
             {
+                TactileEventRouter.RecordAttack(__instance, ___m_character, ___m_weapon);
                 if (!owoSkin.CanFeel()) return;
 
                 if (___m_character.IsBoss()) goto Boss;
@@ -173,6 +175,7 @@ namespace OWO_Valheim
 
 
             Player:
+                if (___m_weapon == null) return;
                 owoSkin.LOG($"HUMANOID {___m_weapon.m_shared.m_itemType} -- {___m_weapon.m_shared.m_animationState} -- {___m_weapon.m_shared.m_name}");
                 switch (___m_weapon.m_shared.m_itemType)
                 {
@@ -185,6 +188,25 @@ namespace OWO_Valheim
                         break;
                 }
                 return;
+            }
+        }
+
+        [HarmonyPatch]
+        class OnAuthoredTactileSound
+        {
+            private static MethodBase TargetMethod()
+            {
+                return AccessTools.Method(typeof(ZSFX), "SetUpVibration");
+            }
+
+            private static bool Prepare()
+            {
+                return TargetMethod() != null;
+            }
+
+            private static void Prefix(ZSFX __instance, string clipName)
+            {
+                TactileEventRouter.OnTactileSound(__instance, clipName);
             }
         }
 
@@ -224,13 +246,13 @@ namespace OWO_Valheim
             }
         }
 
-        [HarmonyPatch(typeof(Character), "ApplyDamage")]
+        [HarmonyPatch(typeof(Player), "OnDamaged")]
         class OnPlayerHit
         {
-            public static void Postfix(Character __instance, HitData hit)
+            public static void Postfix(Player __instance, HitData hit)
             {
 
-                if (__instance != Player.m_localPlayer || !owoSkin.CanFeel()) return;
+                if (__instance != Player.m_localPlayer || __instance.GetHealth() <= 0f || !owoSkin.CanFeel()) return;
                 if (Mathf.FloorToInt(hit.GetTotalDamage()) > 0)
                     owoSkin.Feel("Impact", 3);
             }
@@ -277,9 +299,9 @@ namespace OWO_Valheim
         [HarmonyPatch(typeof(Tameable), "Interact")]
         class OnPet
         {
-            public static void Postfix(bool __result, bool alt)
+            public static void Postfix(Humanoid user, bool __result, bool alt)
             {
-                if (!owoSkin.CanFeel()) return;
+                if (!owoSkin.CanFeel() || user != Player.m_localPlayer) return;
                 if (__result && !alt)
                 {
                     owoSkin.Feel("Pet", 2);
@@ -290,9 +312,9 @@ namespace OWO_Valheim
         [HarmonyPatch(typeof(WearNTear), "Damage")]
         class OnBoatDamage
         {
-            public static void Postfix(WearNTear __instance)
+            public static void Postfix(WearNTear __instance, HitData hit)
             {
-                if (!owoSkin.CanFeel()) return;
+                if (!owoSkin.CanFeel() || hit == null || hit.GetTotalDamage() <= 0f) return;
                 Ship component = __instance.GetComponent<Ship>();
                 if (component != null && component.IsPlayerInBoat(Player.m_localPlayer))
                 {
@@ -340,7 +362,7 @@ namespace OWO_Valheim
             private static readonly int envDelay = 12;
             public static void Postfix(EnvSetup ___m_currentEnv)
             {
-                if (!owoSkin.CanFeel() || !Player.m_localPlayer) return;
+                if (!owoSkin.CanFeel() || !Player.m_localPlayer || ___m_currentEnv == null) return;
 
                 if (currentEnv != ___m_currentEnv.m_name)
                 {
@@ -389,8 +411,8 @@ namespace OWO_Valheim
         {
             public static void Postfix(OfferingBowl __instance, Vector3 spawnPoint)
             {
-
-                if (!Player.IsPlayerInRange(spawnPoint, 100f, Player.m_localPlayer.GetPlayerID()) || !owoSkin.CanFeel()) return;
+                if (!owoSkin.CanFeel() || Player.m_localPlayer == null ||
+                    !Player.IsPlayerInRange(spawnPoint, 100f, Player.m_localPlayer.GetPlayerID())) return;
                 owoSkin.Feel("Boss Spawn", 3);
             }
         }
@@ -400,7 +422,8 @@ namespace OWO_Valheim
         {
             public static void Postfix(Ragdoll __instance)
             {
-                if (!owoSkin.CanFeel() || !Player.IsPlayerInRange(__instance.transform.position, 20f, Player.m_localPlayer.GetPlayerID())) return;
+                if (!owoSkin.CanFeel() || Player.m_localPlayer == null ||
+                    !Player.IsPlayerInRange(__instance.transform.position, 20f, Player.m_localPlayer.GetPlayerID())) return;
                 foreach (EffectList.EffectData obj in __instance.m_removeEffect.m_effectPrefabs)
                 {
                     switch (obj.m_prefab.name)
@@ -460,7 +483,7 @@ namespace OWO_Valheim
         [HarmonyPatch(typeof(Character), "OnCollisionStay")]
         class OnPlayerLand
         {
-            public static void Postfix(Player __instance, bool ___m_groundContact)
+            public static void Postfix(Character __instance, bool ___m_groundContact)
             {
                 if (!owoSkin.CanFeel() || __instance != Player.m_localPlayer) return;
                 if (owoSkin.isJumping && ___m_groundContact)

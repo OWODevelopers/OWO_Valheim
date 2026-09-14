@@ -1,4 +1,5 @@
 ﻿using OWOGame;
+using BepInEx;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,10 +11,11 @@ namespace OWO_Valheim
 {
     public class OWOSkin
     {
+        private const string GameId = "12744019";
 
         private bool suitEnabled = false;
         public bool playerEnabled = false;
-        private string modPath = "BepInEx\\Plugins";
+        private readonly string sensationPath = Path.Combine(Paths.PluginPath, "OWO");
         private Dictionary<String, Sensation> sensationsMap = new Dictionary<String, Sensation>();
         private Dictionary<String, Muscle[]> muscleMap = new Dictionary<String, Muscle[]>();
 
@@ -24,6 +26,7 @@ namespace OWO_Valheim
         public bool teleportIsActive = false;
         public bool rainingIsActive = false;
         public bool stringBowIsActive = false;
+        public bool grapplingIsActive = false;
 
         public Dictionary<string, Sensation> SensationsMap { get => sensationsMap; set => sensationsMap = value; }
 
@@ -43,8 +46,12 @@ namespace OWO_Valheim
 
         private void RegisterAllSensationsFiles()
         {
-            string configPath = $"{modPath}\\OWO";
-            DirectoryInfo d = new DirectoryInfo(configPath);
+            DirectoryInfo d = new DirectoryInfo(sensationPath);
+            if (!d.Exists)
+            {
+                LOG("Sensation directory not found: " + sensationPath);
+                return;
+            }
             FileInfo[] Files = d.GetFiles("*.owo", SearchOption.AllDirectories);
             for (int i = 0; i < Files.Length; i++)
             {
@@ -77,7 +84,8 @@ namespace OWO_Valheim
         {
             LOG("Initializing OWO skin");
 
-            var gameAuth = GameAuth.Create(AllBakedSensations()).WithId("12744019");
+            var gameAuth = GameAuth.Create(AllBakedSensations()).WithId(GameId);
+            LOG($"OWO authentication configured: gameId={gameAuth.id}, modVersion={typeof(Plugin).Assembly.GetName().Version}");
 
             OWO.Configure(gameAuth);
             string[] myIPs = GetIPsFromFile("OWO_Manual_IP.txt");
@@ -119,7 +127,7 @@ namespace OWO_Valheim
         public string[] GetIPsFromFile(string filename)
         {
             List<string> ips = new List<string>();
-            string filePath = Directory.GetCurrentDirectory() + $"\\{modPath}\\OWO" + filename;
+            string filePath = Path.Combine(sensationPath, filename);
             if (File.Exists(filePath))
             {
                 LOG("Manual IP file found: " + filePath);
@@ -154,7 +162,10 @@ namespace OWO_Valheim
 
                 if (intensity != 0)
                 {
-                    toSend = toSend.WithMuscles(Muscle.All.WithIntensity(intensity));
+                    // Treat the value as a percentage so authored muscle routing is
+                    // preserved. WithMuscles would replace routing on unbound effects
+                    // and is ignored by the SDK for effects that already have muscles.
+                    toSend = toSend.MultiplyIntensityBy(intensity);
                 }
 
                 OWO.Send(toSend.WithPriority(Priority));
@@ -195,6 +206,7 @@ namespace OWO_Valheim
             StopRaining();
             StopStringBow();
             StopTeleporting();
+            StopGrappling();
             OWO.Stop();
         }
 
@@ -212,7 +224,7 @@ namespace OWO_Valheim
             if (heartBeatIsActive) return;
 
             heartBeatIsActive = true;
-            HeartBeatFuncAsync();
+            _ = HeartBeatFuncAsync();
         }
 
         public void StopHeartBeat()
@@ -238,7 +250,7 @@ namespace OWO_Valheim
             if (teleportIsActive) return;
 
             teleportIsActive = true;
-            TeleportingFuncAsync();
+            _ = TeleportingFuncAsync();
         }
 
         public void StopTeleporting()
@@ -264,7 +276,7 @@ namespace OWO_Valheim
             if (rainingIsActive) return;
 
             rainingIsActive = true;
-            RainingFuncAsync();
+            _ = RainingFuncAsync();
         }
 
         public void StopRaining()
@@ -289,7 +301,7 @@ namespace OWO_Valheim
             if (stringBowIsActive) return;
 
             stringBowIsActive = true;
-            StringBowFuncAsync();
+            _ = StringBowFuncAsync();
         }
 
         public void StopStringBow()
@@ -303,6 +315,30 @@ namespace OWO_Valheim
             {
                 Feel("String Bow", 1, stringBowIntensity);
                 await Task.Delay(250);
+            }
+        }
+        #endregion
+
+        #region Grappling
+        public void StartGrappling()
+        {
+            if (grapplingIsActive) return;
+
+            grapplingIsActive = true;
+            _ = GrapplingFuncAsync();
+        }
+
+        public void StopGrappling()
+        {
+            grapplingIsActive = false;
+        }
+
+        private async Task GrapplingFuncAsync()
+        {
+            while (grapplingIsActive)
+            {
+                Feel("Grappling", 2);
+                await Task.Delay(350);
             }
         }
         #endregion
