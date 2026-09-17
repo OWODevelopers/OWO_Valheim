@@ -7,12 +7,12 @@ OWO is capable of delivering highly realistic and precise sensations, such as th
 
 Want to get an OWO Suit? [Look here](https://owogame.com/shop/).
 
-# Installation [BepinEx_v5.4.22]
-- Download [BepinEx_v5.4.22](https://github.com/BepInEx/BepInEx/releases/tag/v5.4.22).
-- Extract the BepinEx zip data on the same folder of the game and run the game once.
-- Download the [lastest release of this mod](https://github.com/OWODevelopers/OWO_Valheim/releases/latest)
+# Installation [BepInExPack_Valheim 5.4.2350]
+- Download [BepInExPack_Valheim 5.4.2350](https://thunderstore.io/c/valheim/p/denikson/BepInExPack_Valheim/) (Manual Download).
+- Extract the zip to a separate folder, move the contents of its `BepInExPack_Valheim` folder into the game folder (`BepInEx`, `winhttp.dll` and `doorstop_config.ini` must end up next to `valheim.exe`) and run the game once.
+- Download the [latest release of this mod](https://github.com/OWODevelopers/OWO_Valheim/releases/latest)
 - Extract the mod zip and place all files and the owo folder into the BepInEx\Plugins directory of your game installation.
-- Enjoy your inmersive experience! 😊
+- Enjoy your immersive experience! 😊
 
 # Featured effect
 - Heart Beat
@@ -40,13 +40,6 @@ Want to get an OWO Suit? [Look here](https://owogame.com/shop/).
 - Adrenaline Full Bar
 - Snow Impact
 - Achievement Unlock
-
-# Valheim 1.0 tactile events
-Valheim 1.0 marks selected sound effects as tactile events. The mod correlates those events with recent player and boss attacks to discover new weapons and boss moves, then triggers an existing curated OWO sensation when a semantic mapping is known. Valheim's controller vibration strength is never converted into electrostimulation intensity.
-
-Each previously unseen combination is written once to the BepInEx log as `Tactile event discovered`. The entry includes the clip, weapon, boss event, attack animation, ownership, and vibration modifier so new `.owo` sensations can be reviewed and mapped deliberately.
-
-Valheim 1.0 also has dedicated semantic hooks for grappling, perfect dodges, a full adrenaline bar, snow interaction, and achievement unlocks. Their `.owo` files start from existing reviewed patterns and remain separate so each sensation can be tuned independently.
 
 # Manual Connection
 If you are having trouble with the automatic connection, create a .txt file called OWO_Manual_IP.txt  
